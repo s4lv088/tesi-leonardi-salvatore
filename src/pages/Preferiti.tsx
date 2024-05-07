@@ -53,12 +53,13 @@ export default function Preferiti() {
 
   return (
     <div>
-      <CCPageTitle>
-        <div className="flex flex-row align-center gap-3">
-          <img src={logo} className="flex" />
-          <div className="flex">Preferiti</div>
-        </div>
-      </CCPageTitle>
+      <div className="flex flex-row items-center gap-3 mb-8">
+        <img
+          src={logo}
+          className="lg:w-[69px] h-fit md:w-[69px] h-fit w-[69px] h-[69px] "
+        />
+        <div className="flex items-center text-4xl font-bold">Preferiti</div>
+      </div>
 
       {data?.length > 0 ? (
         <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-6">

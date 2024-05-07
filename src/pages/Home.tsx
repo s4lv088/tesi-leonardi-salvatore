@@ -173,12 +173,16 @@ export default function Home() {
 
   return (
     <div>
-      <CCPageTitle>
-        <div className="flex flex-row align-center gap-3">
-          <img src={logo} className="lg:w-[69px] md:w-[69px] w-[145px]" />
-          <div className="flex">Youtube TRANSCRIPT</div>
+      <div className="flex flex-row items-center gap-3 mb-8">
+        <img
+          src={logo}
+          className="lg:w-[69px] h-fit md:w-[69px] h-fit w-[69px] h-[69px] "
+        />
+        <div className="flex items-center text-4xl font-bold">
+          Youtube TRANSCRIPT
         </div>
-      </CCPageTitle>
+      </div>
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
