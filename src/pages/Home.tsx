@@ -129,7 +129,6 @@ export default function Home() {
   const trascrivi = async (id: string, title: string, language: string) => {
     try {
       const lang = languageSelected.find((item) => item.name === language);
-      console.log("lang", lang);
 
       YoutubeTranscript.fetchTranscript(id, {
         lang: lang ? lang.value : "it",
