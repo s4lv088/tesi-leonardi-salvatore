@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import archivioJson from "../lib/archivio.json";
-import CCPageTitle from "@/components/ui/cc-page-title";
 import logo from "../assets/youtube-logo.png";
 import {
   Collapsible,
