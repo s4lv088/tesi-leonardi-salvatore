@@ -57,11 +57,6 @@ interface responseItem {
   };
 }
 
-interface langItem {
-  name: string;
-  value: string;
-}
-
 export default function Home() {
   const [isSearching, setIsSearching] = useState(false);
   const loader = useLoader();
@@ -71,7 +66,9 @@ export default function Home() {
   const [openDialog, setOpenDialog] = useState(false);
   const [title, setTitle] = useState("");
   const [videoId, setVideoId] = useState("");
-  const [languageSelected, setLanguageSelected] = useState<langItem[]>([]);
+  const [languageSelected, setLanguageSelected] = useState<{
+    [key: string]: string;
+  }>({});
   const [searched, setSearched] = useState(false);
 
   const languages = [
@@ -125,11 +122,15 @@ export default function Home() {
     }
   };
 
-  const trascrivi = async (id: string, title: string, language: string) => {
+  const trascrivi = async (id: string, title: string, name: string) => {
     try {
-      const lang = languageSelected.find((item) => item.name === language);
+      let lang = "it";
+      if (name in languageSelected) {
+        lang = languageSelected ? languageSelected[name] : "";
+      }
+
       YoutubeTranscript.fetchTranscript(id, {
-        lang: lang ? lang.value : "it",
+        lang: lang,
       })
         .then((res) => {
           let trascrizione = "";
@@ -162,10 +163,11 @@ export default function Home() {
     }
   };
 
-  const onChangeLang = (event: { target: { name: any; value: any } }) => {
-    setLanguageSelected([
-      { name: event.target.name, value: event.target.value },
-    ]);
+  const onChangeLang = (event: { target: { name: string; value: string } }) => {
+    setLanguageSelected({
+      ...languageSelected,
+      [event.target.name]: event.target.value,
+    });
   };
 
   return (
