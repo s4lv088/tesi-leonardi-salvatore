@@ -4,7 +4,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useLoader } from "@/context/AppContext";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { string, z } from "zod";
 import CCInput from "@/components/ui/cc-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import YouTubeService from "@/services/YoutubeService";
@@ -122,16 +122,22 @@ export default function Home() {
     }
   };
 
+  const transcriptLanguage = (lang: string) => {
+    if (lang) {
+      return {
+        lang: lang,
+      };
+    }
+  };
+
   const trascrivi = async (id: string, title: string, name: string) => {
     try {
-      let lang = "it";
+      let lang = "";
       if (name in languageSelected) {
-        lang = languageSelected ? languageSelected[name] : "";
+        lang = languageSelected[name] ?? "";
       }
 
-      YoutubeTranscript.fetchTranscript(id, {
-        lang: lang,
-      })
+      YoutubeTranscript.fetchTranscript(id, transcriptLanguage(lang))
         .then((res) => {
           let trascrizione = "";
           res.map((item) => {
@@ -147,7 +153,8 @@ export default function Home() {
         })
         .catch((err) => {
           toast({
-            title: "Attenzione",
+            title:
+              "Attenzione ,il video non può essere trascritto nella lingua scelta",
             variant: "destructive",
             description: err?.message,
           });
@@ -233,6 +240,7 @@ export default function Home() {
                       name={"lang_selected_" + index}
                       onChange={onChangeLang}
                     >
+                      <option value="">Default</option>
                       {languages.map((item) => {
                         return <option value={item.value}>{item.desc}</option>;
                       })}
