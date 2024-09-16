@@ -4,13 +4,12 @@ import { useToast } from "@/components/ui/use-toast";
 import { useLoader } from "@/context/AppContext";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { string, z } from "zod";
+import { z } from "zod";
 import CCInput from "@/components/ui/cc-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import YouTubeService from "@/services/YoutubeService";
 import { Form } from "@/components/ui/form";
 import logo from "../assets/youtube-logo.png";
-import { YoutubeTranscript } from "youtube-transcript";
 import DialogTrascrizione from "@/components/DialogTrascrizione";
 import { htmlToText } from "@/lib/utils";
 import { Alert, AlertTitle } from "@/components/ui/alert";
@@ -122,25 +121,30 @@ export default function Home() {
     }
   };
 
-  const transcriptLanguage = (lang: string) => {
+  /*  const transcriptLanguage = (lang: string) => {
     if (lang) {
       return {
         lang: lang,
       };
     }
-  };
+  }; */
 
   const trascrivi = async (id: string, title: string, name: string) => {
     try {
-      let lang = "";
+      let languages = "";
       if (name in languageSelected) {
-        lang = languageSelected[name] ?? "";
+        languages = languageSelected[name] ?? "";
       }
 
-      YoutubeTranscript.fetchTranscript(id, transcriptLanguage(lang))
-        .then((res) => {
+      let req = {
+        id: id,
+        lang: languages ?? null,
+      };
+
+      YouTubeService.transcript(req)
+        .then((res: any) => {
           let trascrizione = "";
-          res.map((item) => {
+          res?.data?.map((item: any) => {
             trascrizione = trascrizione + " " + item.text;
           });
 
