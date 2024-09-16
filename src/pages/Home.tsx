@@ -136,29 +136,40 @@ export default function Home() {
         languages = languageSelected[name] ?? "";
       }
 
-      let req = {
+      const request = {
         id: id,
-        lang: languages ?? null,
+        lang: "",
       };
+      if (languages) {
+        request.lang = languages;
+      }
 
-      YouTubeService.transcript(req)
-        .then((res: any) => {
+      YouTubeService.transcript(request)
+        .then((res) => {
           let trascrizione = "";
-          res?.data?.map((item: any) => {
-            trascrizione = trascrizione + " " + item.text;
-          });
+          if (res?.data?.length > 0) {
+            res?.data?.map((item: any) => {
+              trascrizione = trascrizione + " " + item.text;
+            });
 
-          const encodedTranscript = htmlToText(trascrizione);
-          setTrascrizione(encodedTranscript ?? "");
-          setTitle(title);
-          setVideoId(id);
+            const encodedTranscript = htmlToText(trascrizione);
+            setTrascrizione(encodedTranscript ?? "");
+            setTitle(title);
+            setVideoId(id);
 
-          setOpenDialog(true);
+            setOpenDialog(true);
+          } else {
+            toast({
+              title: "Attenzione",
+              variant: "destructive",
+              description:
+                "il video non può essere trascritto nella lingua scelta",
+            });
+          }
         })
         .catch((err) => {
           toast({
-            title:
-              "Attenzione ,il video non può essere trascritto nella lingua scelta",
+            title: "Attenzione ,il video non può essere trascritto",
             variant: "destructive",
             description: err?.message,
           });

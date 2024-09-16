@@ -27,12 +27,17 @@ app.use(express.json());
 //path senza redirect relativi a liferay
 app.post("/transcript", async function (req, res) {
   console.log("Ricevuto una richiesta POST", req?.body?.id);
-  let response = await YoutubeTranscript.fetchTranscript(
-    req?.body?.id,
-    req?.body?.lang
-  );
+  const language = { lang: req?.body?.lang };
+  try {
+    let response = await YoutubeTranscript.fetchTranscript(
+      req?.body?.id,
+      language ?? null
+    );
 
-  res.send(JSON.stringify(response));
+    res.send(JSON.stringify(response));
+  } catch (err) {
+    res.send(err);
+  }
 });
 
 app.listen(PORT, () => {
